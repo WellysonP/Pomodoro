@@ -27,14 +27,22 @@ class PomodoroPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 EntradaTempo(
-                  inc: store.incrementarTempoTrabalho,
-                  dec: store.decrementarTempoTrabalho,
+                  inc: store.iniciado && store.estaTrabalhando()
+                      ? null
+                      : store.incrementarTempoTrabalho,
+                  dec: store.iniciado && store.estaTrabalhando()
+                      ? null
+                      : store.decrementarTempoTrabalho,
                   titulo: "Trabalho",
                   valor: store.tempoTrabalho,
                 ),
                 EntradaTempo(
-                  inc: store.incrementarTempoDescanso,
-                  dec: store.decrementarTempoDescanso,
+                  inc: store.iniciado && !store.estaTrabalhando()
+                      ? null
+                      : store.incrementarTempoDescanso,
+                  dec: store.iniciado && !store.estaTrabalhando()
+                      ? null
+                      : store.decrementarTempoDescanso,
                   titulo: "Descanso",
                   valor: store.tempoDescanso,
                 ),

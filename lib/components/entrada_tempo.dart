@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+import '../store/pomodoro.store.dart';
 
 class EntradaTempo extends StatelessWidget {
   final String titulo;
@@ -19,6 +19,7 @@ class EntradaTempo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<PomodoroStore>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -29,41 +30,41 @@ class EntradaTempo extends StatelessWidget {
           ),
         ),
         SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: dec,
-              child: Icon(
-                Icons.arrow_downward,
-                color: Colors.white,
+        Observer(builder: (context) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: dec,
+                child: Icon(
+                  Icons.arrow_downward,
+                  color: Colors.white,
+                ),
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  primary: store.estaTrabalhando() ? Colors.red : Colors.green,
+                ),
               ),
-              style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                // padding: EdgeInsets.all(15),
-                primary: Colors.red,
+              Text(
+                "${valor} min",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
               ),
-            ),
-            Text(
-              "${valor} min",
-              style: TextStyle(
-                fontSize: 18,
+              ElevatedButton(
+                onPressed: inc,
+                child: Icon(
+                  Icons.arrow_upward,
+                  color: Colors.white,
+                ),
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  primary: store.estaTrabalhando() ? Colors.red : Colors.green,
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: inc,
-              child: Icon(
-                Icons.arrow_upward,
-                color: Colors.white,
-              ),
-              style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                // padding: EdgeInsets.all(15),
-                primary: Colors.red,
-              ),
-            ),
-          ],
-        ),
+            ],
+          );
+        }),
       ],
     );
   }
