@@ -33,24 +33,23 @@ abstract class _PomodoroStore with Store {
   void iniciar() {
     if (tempoTrabalho == 0 && tempoDescanso == 0) {
       return;
-    } else {
-      if (estaTrabalhando()) {
-        minutos = tempoTrabalho;
-      } else {
-        minutos = tempoDescanso;
-      }
-      iniciado = true;
-      cronometro = Timer.periodic(Duration(seconds: 1), (timer) {
-        if (minutos == 0 && segundos == 0) {
-          _trocarTipoIntervalo();
-        } else if (segundos == 0) {
-          segundos = 59;
-          minutos--;
-        } else {
-          segundos--;
-        }
-      });
+    } else if (tempoTrabalho == 0 && tempoDescanso != 0) {
+      tipoIntervalo = TipoIntervalo.DESCANSO;
+      minutos = tempoDescanso;
+    } else if (estaTrabalhando()) {
+      minutos = tempoTrabalho;
     }
+    iniciado = true;
+    cronometro = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (minutos == 0 && segundos == 0) {
+        _trocarTipoIntervalo();
+      } else if (segundos == 0) {
+        segundos = 59;
+        minutos--;
+      } else {
+        segundos--;
+      }
+    });
   }
 
   @action
@@ -63,11 +62,6 @@ abstract class _PomodoroStore with Store {
   void reiniciar() {
     parar();
     minutos = estaTrabalhando() ? tempoTrabalho : tempoDescanso;
-    // if (estaTrabalhando()) {
-    //   minutos = tempoTrabalho;
-    // } else {
-    //   minutos = tempoDescanso;
-    // }
     segundos = 0;
   }
 
