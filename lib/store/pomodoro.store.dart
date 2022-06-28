@@ -13,16 +13,16 @@ abstract class _PomodoroStore with Store {
   bool iniciado = false;
 
   @observable
-  int minutos = 0;
+  int minutos = 1;
 
   @observable
   int segundos = 0;
 
   @observable
-  int tempoTrabalho = 0;
+  int tempoTrabalho = 1;
 
   @observable
-  int tempoDescanso = 0;
+  int tempoDescanso = 1;
 
   @observable
   TipoIntervalo tipoIntervalo = TipoIntervalo.TRABALHO;
@@ -31,14 +31,14 @@ abstract class _PomodoroStore with Store {
 
   @action
   void iniciar() {
-    if (tempoTrabalho == 0 && tempoDescanso == 0) {
-      return;
-    } else if (tempoTrabalho == 0 && tempoDescanso != 0) {
-      tipoIntervalo = TipoIntervalo.DESCANSO;
-      minutos = tempoDescanso;
-    } else if (estaTrabalhando()) {
-      minutos = tempoTrabalho;
-    }
+    // if (tempoTrabalho == 0 && tempoDescanso == 0) {
+    //   return;
+    // } else if (tempoTrabalho == 0 && tempoDescanso != 0) {
+    //   tipoIntervalo = TipoIntervalo.DESCANSO;
+    //   minutos = tempoDescanso;
+    // } else if (estaTrabalhando()) {
+    //   minutos = tempoTrabalho;
+    // }
     iniciado = true;
     cronometro = Timer.periodic(Duration(seconds: 1), (timer) {
       if (minutos == 0 && segundos == 0) {
@@ -75,12 +75,11 @@ abstract class _PomodoroStore with Store {
 
   @action
   void decrementarTempoTrabalho() {
-    if (tempoTrabalho <= 0) {
-      return;
-    }
-    tempoTrabalho--;
-    if (estaTrabalhando()) {
-      reiniciar();
+    if (tempoTrabalho > 1) {
+      tempoTrabalho--;
+      if (estaTrabalhando()) {
+        reiniciar();
+      }
     }
   }
 
@@ -94,12 +93,11 @@ abstract class _PomodoroStore with Store {
 
   @action
   void decrementarTempoDescanso() {
-    if (tempoDescanso <= 0) {
-      return;
-    }
-    tempoDescanso--;
-    if (!estaTrabalhando()) {
-      reiniciar();
+    if (tempoDescanso > 1) {
+      tempoDescanso--;
+      if (!estaTrabalhando()) {
+        reiniciar();
+      }
     }
   }
 
